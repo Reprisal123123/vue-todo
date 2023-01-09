@@ -22,7 +22,7 @@
     },
     data() {
       return {
-        // todoItems: []123,
+        // todoItems: [],
       }
     },
 
