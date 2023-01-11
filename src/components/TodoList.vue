@@ -1,10 +1,10 @@
 <template>
     <div>
         <transition-group name="list" tag="ul">
-            <li v-for="(todoItem, index) in this.$store.state.todoItems" :key="index" class="shadow">
-                <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete(todoItem, index)"></i>
+            <li v-for="(todoItem, index) in this.storedTodoItems" :key="index" class="shadow">
+                <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete({todoItem, index})"></i>
                 <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-                <span class="removeBtn" @click="removeTodoItem(index, todoItem.item)">
+                <span class="removeBtn" @click="removeTodo({index, todoItem})">
                     <i class="fas fa-trash-alt"></i>
                 </span>
             </li>
@@ -13,27 +13,41 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
+
     export default {
         // props: ['propsdata'],
 
         methods : {
-            removeTodoItem(index, todoItem) {
-                // this.$emit('removeTodoItem', index, todoItem);
-                // this.todoItems.splice(index, 1);
-                // localStorage.removeItem(todoItem.item);
-                this.$store.commit('removeOneItem', {
-                    index,
-                    todoItem // 문자열
-                });
-            },
+            ...mapMutations({
+                removeTodo: 'removeOneItem', // 인자를 따로 적어주지 않아도 사용한 인자를 알아서 넣어준다 (removeTodo({index, todoItem}) 처럼)
+                toggleComplete: 'toggleOneItem',
+            }),
 
-            toggleComplete(todoItem, index) {
-                this.$store.commit('toggleOneItem', {
-                    todoItem, 
-                    index
-                });
-            },
+            // removeTodoItem(index, todoItem) {
+            //     // this.$emit('removeTodoItem', index, todoItem);
+            //     // this.todoItems.splice(index, 1);
+            //     // localStorage.removeItem(todoItem.item);
+            //     this.$store.commit('removeOneItem', {
+            //         index,
+            //         todoItem
+            //     });
+            // },
+
+            // toggleComplete(todoItem, index) {
+            //     this.$store.commit('toggleOneItem', {
+            //         todoItem, 
+            //         index
+            //     });
+            // },
         },
+        
+        computed: {
+            // todoItems() {
+            //     return this.$store.getters.storedTodoItems;
+            // }
+            ...mapGetters(['storedTodoItems']),
+        }
 
     }
 </script>

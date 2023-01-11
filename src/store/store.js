@@ -21,6 +21,11 @@ export const store = new Vuex.Store({
         headerText : 'TODO it!!',
         todoItems: storage.fetch(),
     },
+    getters : {
+        storedTodoItems(state) {
+            return state.todoItems;
+        }
+    },
 
     mutations : {
         addOneItem(state, todoItem) {
@@ -32,7 +37,7 @@ export const store = new Vuex.Store({
         // 20230109 여기서부터 ㄱㄱ
         removeOneItem(state, payload) {
             state.todoItems.splice(payload.index, 1);
-            localStorage.removeItem(payload.todoItem);
+            localStorage.removeItem(payload.todoItem.item);
         },
     
         toggleOneItem(state, payload) {
@@ -41,7 +46,7 @@ export const store = new Vuex.Store({
             state.todoItems[payload.index].completed = !state.todoItems[payload.index].completed;
             // 로컬스토리지에는 업데이트 기능이 없어서 지우고 다시 넣어야 함
             localStorage.removeItem(payload.todoItem.item);
-            localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+            localStorage.setItem(payload.todoItem.item, JSON .stringify(payload.todoItem));
         },
     
         clearAllItems(state) {
